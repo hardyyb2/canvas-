@@ -1,0 +1,102 @@
+<html>
+<head>
+</head>
+<body style="margin:0;">
+  <canvas>
+  </canvas>
+  <script>
+//making colors
+  var color = [
+    '#0000FF',
+    '#ff1493',
+    '#00ff00',
+    '#ffooff',
+    '#ff0000',
+    '#ffff00',
+    '#00ffff',
+    '#00bfff'
+  ];
+//moouse variable
+var mouse={x:innerWidth/2,y:innerHeight/2};
+
+  //mouse event
+  window.addEventListener("mousemove",function(event){
+    mouse.x=event.x;
+    mouse.y=event.y;
+  });
+
+//function for getting integers in range
+function getIntegerBetween(min,max){
+  return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+
+//creating object constructor(class)
+function Particle(){
+  this.x=x;
+  this.y=y;
+  this.radius=radius;
+  this.color=color[Math.floor(Math.random()*color.length)];
+  this.radians=Math.random()*Math.PI*2;
+  this.lastmouse={x:x,y:y};
+  this.update=function(){
+    var lastpoint={x:this.x,y:this.y};
+
+this.lastmouse.x+=(mouse.x-this.lastmouse.x)*0.05;
+this.lastmouse.y+=(mouse.y-this.lastmouse.y)*0.05;
+    this.radians+=this.rd;
+    this.x = this.lastmouse.x + Math.cos(this.radians)*this.pose;
+    this.y = this.lastmouse.y + Math.sin(this.radians)*this.pose;
+//to access lastpoint in draw as it is declared only in update function
+this.draw(lastpoint);
+  }
+
+  this.draw=function(lastpoint){
+    c.beginPath();
+    c.strokeStyle=this.color;
+    c.lineWidth=this.radius;
+    c.moveTo(lastpoint.x,lastpoint.y);
+    c.lineTo(this.x,this.y);
+    c.stroke();
+    c.closePath();
+
+  }
+  this.rd=Math.random()*(0.07-0.04)+0.04;
+  this.pose=getIntegerBetween(20,110);
+  }
+
+
+//creating cnavas
+  var canvas = document.querySelector("canvas");
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+  var c= canvas.getContext("2d");
+
+//creating circle
+//craeting a array of partricles
+var numberofparticles = 100;
+var particles=[];
+
+for(var i=0;i<numberofparticles;i++){
+  var x = innerWidth/2;
+  var y= innerHeight/2;;
+  var radius=Math.random()*2+1;
+
+  particles.push(new Particle(x,y,radius));
+}
+
+//creating animate function to run it
+animate();
+
+function animate(){c.fillStyle="rgba(255,255,255,0.1)";
+  c.fillRect(0,0,innerWidth,innerHeight);
+  setTimeout(animate,20);
+  for(var i=0;i<particles.length;i++){
+    particles[i].update();
+  }
+}
+
+ </script>
+ var radius=4;
+</body>
+</html>

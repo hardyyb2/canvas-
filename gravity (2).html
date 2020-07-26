@@ -1,0 +1,85 @@
+<html>
+    <head>
+    </head>
+<body style="margin:0">
+    <canvas></canvas>
+    <script>
+        var canvas  = document.querySelector("canvas");
+        canvas.width=innerWidth;
+        canvas.height=innerHeight;
+        var c = canvas.getContext("2d");
+        var color=['#0000FF', 
+         '#ff1493',
+  '#00ff00',
+  '#ffooff',
+  '#ff0000',
+  '#ffff00',
+  '#00ffff',
+  '#00bfff'
+   ];
+   var number =300;
+
+    function Circle(x,y,dx,dy,radius){
+        this.x=x;
+        this.y=y;
+        this.dy=dy;
+        this.dx=dx;
+        this.radius=radius;
+        this.color=color[Math.floor(Math.random()*color.length)];
+        this.draw=()=>{
+            c.beginPath();
+            c.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+            c.fillStyle=this.color;
+            c.fill();
+            c.closePath();
+
+
+        }
+        this.update=()=>{
+//            
+            
+            //reducing acceleration slower than its adding acceleration
+            if(this.y +this.radius +this.dy> innerHeight ){
+                this.dy=-this.dy*0.9;
+            }
+            //adding acceleration
+            else{this.dy=this.dy+1;}
+            
+            if(this.x + this.radius +this.dx >innerWidth || this.x - this.radius  <0){
+                this.dx=-this.dx;
+            }
+
+
+            this.y+=this.dy;
+            this.x+=this.dx;
+            this.draw();
+        }
+    }
+ var circleArray =[];
+for(var i=0;i<number;i++){
+    var xPos=Math.random()*innerWidth-radius ;
+    var yPos=Math.random()*innerHeight-radius;
+    var speedx=(Math.random()-0.5)*8;
+    var speedy=(Math.random()-0.5) *8;
+    var radius=Math.random()*40 +1;
+    circleArray.push(new Circle(xPos,yPos,speedx,speedy,radius)); 
+
+}
+
+
+(function animate(){
+c.clearRect(0,0,innerWidth,innerHeight);
+setTimeout(animate,20);
+for(var i =0;i<circleArray.length;i++){
+    circleArray[i].update();
+}
+
+})();
+// setTimeout(function(){
+//    window.location.reload(1);
+// }, 5000);
+
+
+    </script>
+</body>
+</html>
